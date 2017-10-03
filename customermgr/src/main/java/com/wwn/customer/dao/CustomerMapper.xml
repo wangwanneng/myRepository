@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wwn.customer.dao.CustomerDao">
+	
+	<!-- 使用ehcache缓存，需要实体序列化和ehcache的xml -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+	<insert id="create" parameterType="com.wwn.customer.entity.Customer">
+		insert into tbl_customer(customerId,pwd,showName,trueName,registerTime) 
+		value(#{customerId},#{pwd},#{showName},#{trueName},#{registerTime})
+	</insert>
+	
+	<update id="update" parameterType="com.wwn.customer.entity.Customer">
+		update tbl_customer set customerId = #{customerId},pwd = #{pwd},showName = #{showName},trueName = #{trueName},
+		registerTime = #{registerTime} where uuid = #{uuid}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from tbl_customer where uuid = #{uuid}
+	</delete>
+	
+	<select id="getByUuId" parameterType="int" resultType="com.wwn.customer.entity.Customer">
+		select * from tbl_customer where uuid = #{uuid}
+	</select>
+	
+	<select id="getByConditionPage" parameterType="com.wwn.customer.entity.CustomerQuery" resultType="com.wwn.customer.entity.Customer">
+		select * from tbl_customer
+		<where>
+			<if test="customerId != null">
+				and customerId = #{customerId}
+			</if>
+			<if test="pwd != null">
+				and pwd = #{pwd}
+			</if>
+			<if test="showName != null">
+				and showName = #{showName}
+			</if>
+			<if test="trueName != null">
+				and trueName = #{trueName}
+			</if>
+			<if test="registerTime != null">
+				and registerTime = #{registerTime}
+			</if>
+		</where>
+	</select>
+</mapper>
